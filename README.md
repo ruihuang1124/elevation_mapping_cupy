@@ -91,3 +91,9 @@ The suite includes:
 
 - Image input and semantic fusion: removed from the supported surface.
 - `plane_segmentation/`: disabled by default via `COLCON_IGNORE` (heavy deps, not part of bring-up).
+
+## For M20 Mujoco Elevation Mapping
+
+```bash
+ros2 launch elevation_mapping_cupy elevation_mapping.launch.py robot_config:=m20.yaml
+```
