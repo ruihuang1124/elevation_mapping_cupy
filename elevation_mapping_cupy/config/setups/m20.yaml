@@ -1,0 +1,30 @@
+/**:
+  ros__parameters:
+    use_initializer_at_start: false
+    always_clear_with_initializer: false
+
+    data_type: "float32"
+
+    # --- 坐标系与网格配置 ---
+    map_frame: "odom"
+    base_frame: "base_link"
+    corrected_map_frame: "odom"
+    resolution: 0.05
+    map_length: 4.0
+    
+    # --- 传感器输入 ---
+    subscribers:
+      front_lidar:
+        topic_name: '/LIDAR_POINT_CLOUD_MERGED'
+        data_type: pointcloud
+
+    # --- 地图输出 ---
+    publishers:
+      elevation_map_raw:
+        layers: ['elevation', 'variance']
+        basic_layers: ['elevation']
+        fps: 10.0
+      elevation_map_filter:
+        layers: ['min_filter', 'smooth', 'inpaint', 'elevation']
+        basic_layers: ['min_filter']
+        fps: 10.0

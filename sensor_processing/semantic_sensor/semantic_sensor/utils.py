@@ -9,7 +9,7 @@ setup_logger()
 def encode_max(maxim, index):
     maxim, index = cp.asarray(maxim, dtype=cp.float32), cp.asarray(index, dtype=cp.uint32)
     # fuse them
-    maxim = maxim.astype(cp.float16)
+    maxim = maxim.astype(cp.float)
     maxim = maxim.view(cp.uint16)
     maxim = maxim.astype(cp.uint32)
     index = index.astype(cp.uint32)
@@ -22,7 +22,7 @@ def decode_max(mer):
     mer = mer.astype(cp.float32)
     mer = mer.view(dtype=cp.uint32)
     ma = cp.bitwise_and(mer, 0xFFFF, dtype=np.uint16)
-    ma = ma.view(np.float16)
+    ma = ma.view(np.float32)
     ma = ma.astype(np.float32)
     ind = cp.right_shift(mer, 16)
     return ma, ind
