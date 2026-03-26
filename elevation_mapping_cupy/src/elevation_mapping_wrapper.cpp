@@ -244,8 +244,10 @@ bool ElevationMappingWrapper::exists_layer(const std::string& layerName) {
 
 void ElevationMappingWrapper::get_layer_data(const std::string& layerName, RowMatrixXf& map) {
   py::gil_scoped_acquire acquire;
-  map = RowMatrixXf(map_n_, map_n_);
-  map_.attr("get_map_with_name_ref")(layerName, Eigen::Ref<RowMatrixXf>(map));
+  RowMatrixXf py_map(map_n_, map_n_);
+  map_.attr("get_map_with_name_ref")(layerName, Eigen::Ref<RowMatrixXf>(py_map));
+  
+  map = py_map.reverse().transpose();  
 }
 
 void ElevationMappingWrapper::get_grid_map(grid_map::GridMap& gridMap, const std::vector<std::string>& requestLayerNames) {
@@ -269,9 +271,9 @@ void ElevationMappingWrapper::get_grid_map(grid_map::GridMap& gridMap, const std
   for (const auto& layerName : layerNames) {
     bool exists = map_.attr("exists_layer")(layerName).cast<bool>();
     if (exists) {
-      RowMatrixXf map(map_n_, map_n_);
-      map_.attr("get_map_with_name_ref")(layerName, Eigen::Ref<RowMatrixXf>(map));
-      gridMap.add(layerName, map);
+      RowMatrixXf py_map(map_n_, map_n_);
+      map_.attr("get_map_with_name_ref")(layerName, Eigen::Ref<RowMatrixXf>(py_map));
+      gridMap.add(layerName, py_map.transpose());
     }
   }
   if (enable_normal_color_) {
@@ -279,9 +281,10 @@ void ElevationMappingWrapper::get_grid_map(grid_map::GridMap& gridMap, const std
     RowMatrixXf normal_y(map_n_, map_n_);
     RowMatrixXf normal_z(map_n_, map_n_);
     map_.attr("get_normal_ref")(Eigen::Ref<RowMatrixXf>(normal_x), Eigen::Ref<RowMatrixXf>(normal_y), Eigen::Ref<RowMatrixXf>(normal_z));
-    gridMap.add("normal_x", normal_x);
-    gridMap.add("normal_y", normal_y);
-    gridMap.add("normal_z", normal_z);
+    
+    gridMap.add("normal_x", normal_y.transpose()); 
+    gridMap.add("normal_y", normal_x.transpose());
+    gridMap.add("normal_z", normal_z.transpose());
   }
   gridMap.setBasicLayers(basicLayerNames);
   if (enable_normal_color_) {

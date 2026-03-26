@@ -8,7 +8,7 @@ def generate_launch_description():
     elevation_mapping_cupy_dir = get_package_share_directory('elevation_mapping_cupy')
 
     return LaunchDescription([
-        launch_ros.actions.SetParameter(name='use_sim_time', value=True),
+        launch_ros.actions.SetParameter(name='use_sim_time', value=False),
         Node(
             package='elevation_mapping_cupy',
             executable='elevation_mapping_node',
