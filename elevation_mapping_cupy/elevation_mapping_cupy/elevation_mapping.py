@@ -50,8 +50,8 @@ cp.cuda.set_allocator(pool.malloc)
 
 class ElevationMap:
 
-    def get_position(self, *args, **kwargs):
-        return [float(self.center[0]), float(self.center[1])]
+    # def get_position(self, *args, **kwargs):
+    #     return [float(self.center[0]), float(self.center[1])]
     """Core elevation mapping class."""
 
     def __init__(self, param: Parameter):

@@ -641,7 +641,7 @@ void ElevationMappingNode::updatePose() {
   const auto& timeStamp = this->now();
   Eigen::Affine3d transformationBaseToMap;
   try {
-    transformStamped = tfBuffer_->lookupTransform(mapFrameId_, baseFrameId_, timeStamp, tf2::durationFromSec(1.0));
+    transformStamped = tfBuffer_->lookupTransform(mapFrameId_, baseFrameId_, tf2::TimePointZero);
     transformationBaseToMap = tf2::transformToEigen(transformStamped);
   } catch (tf2::TransformException& ex) {
     RCLCPP_ERROR(this->get_logger(), "%s", ex.what());
